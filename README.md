@@ -7,7 +7,7 @@ This project is quite unstable at times and can break under many circumstances.
 # Showcase
 ![Alt text](https://media.discordapp.net/attachments/630277945507708928/863149722303070259/unknown.png?width=847&height=499 "")
 __Video__:  
-
+https://cdn.discordapp.com/attachments/857390091110842368/863162205985832981/showcase.mp4
 
 # Known Bugs
 - Spamming either of the action keys will cause letter pileups and row misalignment.  
