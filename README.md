@@ -1,5 +1,6 @@
 # spwn-letters
-My very first project using [Spwn]("https://github.com/Spu7Nix/SPWN-language")
+A 6 letter spelling simulator thing made in Geometry Dash.  
+My very first project using [Spwn](https://github.com/Spu7Nix/SPWN-language) scripting.
 
 This project is quite unstable at times and can break under many circumstances.
 
