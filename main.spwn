@@ -1,0 +1,112 @@
+gs = import gamescene
+import "disable_letters.spwn"
+
+// The mess of groups for all letters a-z per row.
+first_choices = [?g, 3g, 4g, 5g, 6g, 7g, 8g, 9g, 10g, 11g, 12g, 13g, 14g, 15g, 16g, 17g, 18g, 19g, 20g, 21g, 22g, 23g, 24g, 25g, 26g, 27g, 28g]
+second_choices = [?g, 29g, 30g, 31g, 32g, 33g, 34g, 35g, 36g, 37g, 38g, 39g, 40g, 41g, 42g, 43g, 44g, 45g, 46g, 47g, 48g, 49g, 50g, 51g, 52g, 53g, 54g]
+third_choices = [?g, 55g, 56g, 57g, 58g, 59g, 60g, 61g, 62g, 63g, 64g, 65g, 66g, 67g, 68g, 69g, 70g, 71g, 72g, 73g, 74g, 75g, 76g, 77g, 78g, 79g, 80g]
+fourth_choices = [?g, 81g, 82g, 83g, 84g, 85g, 86g, 87g, 88g, 89g, 90g, 91g, 92g, 93g, 94g, 95g, 96g, 97g, 98g, 99g, 100g, 101g, 102g, 103g, 104g, 105g, 106g]
+fifth_choices = [?g, 107g, 108g, 109g, 110g, 111g, 112g, 113g, 114g, 115g, 116g, 117g, 118g, 119g, 120g, 121g, 122g, 123g, 124g, 125g, 126g, 127g, 128g, 129g, 130g, 131g, 132g]
+sixth_choices = [?g, 133g, 134g, 135g, 136g, 137g, 138g, 139g, 140g, 141g, 142g, 143g, 144g, 145g, 146g, 147g, 148g, 149g, 150g, 151g, 152g, 153g, 154g, 155g, 156g, 157g, 158g]
+
+arrow_selector = 159g
+
+// Counters to keep track of each row's letters.
+first_index = counter(0)
+second_index = counter(0)
+third_index = counter(0)
+fourth_index = counter(0)
+fifth_index = counter(0)
+sixth_index = counter(0)
+
+letter_selected = counter(0) // 0 - 25
+row_selected = counter(0)    // 0 - 5
+
+// A macro to toggle the next letter on, and the previous off.
+toggle_letter = (choice_array, choice_index) {
+    if choice_index == 27 {
+        choice_index -= 27
+        wait()
+    }
+
+    letter_selected = choice_index
+
+    letter_index = letter_selected.to_const(0..choice_array.length)
+
+    current_group = choice_array[letter_index]
+    current_group.toggle_on()
+
+    if letter_index == 0 {
+        wait()
+        previous_group = choice_array[choice_array.length - 1]
+        previous_group.toggle_off()
+    } else {
+        wait()
+        previous_group = choice_array[letter_index - 1]
+        previous_group.toggle_off()
+    }
+}
+
+// Space, changes the letter in the current row.
+gs.button_a().on_triggered(!{
+    row_number = row_selected.to_const(0..6)
+
+    switch row_number {
+        case 0: () {
+            first_index += 1
+            toggle_letter(first_choices, first_index)
+        }()
+        case 1: () {
+            second_index += 1
+            toggle_letter(second_choices, second_index)
+        }()
+        case 2: () {
+            third_index += 1
+            toggle_letter(third_choices, third_index)
+        }()
+        case 3: () {
+            fourth_index += 1
+            toggle_letter(fourth_choices, fourth_index)
+        }()
+        case 4: () {
+            fifth_index += 1
+            toggle_letter(fifth_choices, fifth_index)
+        }()
+        case 5: () {
+            sixth_index += 1
+            toggle_letter(sixth_choices, sixth_index)
+        }()
+    }
+})
+
+// Up arrow, changes the letter row
+gs.button_b().on_triggered(!{
+    row_selected += 1    // Increment the row count
+    arrow_selector.move(10, 0, 0.25)
+
+    // Used to keep track of where each row left off
+    // Each case is "on row switch", so case 2 would be "when you switch to row 3"
+    switch row_selected {
+        case 1: () {
+            first_index = letter_selected
+        }()
+        case 2: () {
+            second_index = letter_selected
+        }()
+        case 3: () {
+            third_index = letter_selected
+        }()
+        case 4: () {
+            fourth_index = letter_selected
+        }()
+        case 5: () {
+            fifth_index = letter_selected
+        }()
+        case 6: () {
+            sixth_index = letter_selected
+            arrow_selector.move(-60, 0, 0.25)
+            row_selected -= 6
+            wait()
+        }()
+    }
+})
